@@ -43,7 +43,7 @@ add_library(tbb
 
 target_include_directories(tbb 
   PUBLIC 
-    include/tbb
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/tbb>
   PRIVATE
     src)
 
@@ -71,3 +71,22 @@ check_cxx_compiler_flag("-mrtm" RTM)
 if(RTM)
   target_compile_options(tbb PRIVATE -mrtm)
 endif()
+
+install(
+  TARGETS tbb 
+  EXPORT tbb-exports
+  ARCHIVE DESTINATION lib/static
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib)
+  
+install(
+  DIRECTORY include/tbb 
+  DESTINATION include)
+  
+install(
+  EXPORT tbb-exports
+  DESTINATION lib/cmake/tbb)
+  
+export(
+  EXPORT tbb-exports
+  NAMESPACE tbb)
