@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.8)
 project(tbb CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 configure_file(cmake/version_string.ver.in version_string.ver)
 
-add_library(tbb 
+add_library(tbb
     src/tbb/concurrent_hash_map.cpp
     src/tbb/concurrent_queue.cpp
     src/tbb/concurrent_vector.cpp
@@ -37,19 +37,19 @@ add_library(tbb
     src/tbb/observer_proxy.cpp
     src/tbb/tbb_statistics.cpp
     src/tbb/tbb_main.cpp
-    
+
     src/rml/client/rml_tbb.cpp
 )
 
-target_include_directories(tbb 
-  PUBLIC 
+target_include_directories(tbb
+  PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/tbb>
   PRIVATE
     src)
 
 target_compile_features(tbb PUBLIC cxx_std_17)
-target_compile_definitions(tbb 
-  PRIVATE 
+target_compile_definitions(tbb
+  PRIVATE
     __TBB_BUILD=1
 )
 
@@ -73,20 +73,20 @@ if(RTM)
 endif()
 
 install(
-  TARGETS tbb 
+  TARGETS tbb
   EXPORT tbb-exports
   ARCHIVE DESTINATION lib/static
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib)
-  
+
 install(
-  DIRECTORY include/tbb 
+  DIRECTORY include/tbb
   DESTINATION include)
-  
+
 install(
   EXPORT tbb-exports
   DESTINATION lib/cmake/tbb)
-  
+
 export(
   EXPORT tbb-exports
   NAMESPACE tbb)
