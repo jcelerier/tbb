@@ -43,9 +43,9 @@ add_library(tbb
 
 target_include_directories(tbb
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/tbb>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE
-    src)
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 
 target_compile_features(tbb PUBLIC cxx_std_17)
 target_compile_definitions(tbb
@@ -55,10 +55,16 @@ target_compile_definitions(tbb
 
 if(UNIX)
   target_compile_definitions(tbb PRIVATE USE_PTHREAD)
+else()
+  target_compile_definitions(tbb PRIVATE USE_WINTHREAD)
 endif()
 
 if(UNIX AND NOT APPLE)
   target_compile_definitions(tbb PRIVATE DO_ITT_NOTIFY)
+endif()
+
+if(WIN32)
+  target_compile_definitions(tbb PUBLIC __TBB_NO_IMPLICIT_LINKAGE=1)
 endif()
 
 include(CheckCXXCompilerFlag)

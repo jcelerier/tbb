@@ -216,10 +216,8 @@ namespace tbb { namespace internal { class cpu_ctl_env; } }
         }
     }
 #else
-    extern "C" {
-        void __TBB_EXPORTED_FUNC __TBB_get_cpu_ctl_env ( tbb::internal::cpu_ctl_env* );
-        void __TBB_EXPORTED_FUNC __TBB_set_cpu_ctl_env ( const tbb::internal::cpu_ctl_env* );
-    }
+void __TBB_get_cpu_ctl_env ( tbb::internal::cpu_ctl_env* ctl );
+void __TBB_set_cpu_ctl_env ( const tbb::internal::cpu_ctl_env* ctl );
 #endif
 
 namespace tbb {
@@ -239,6 +237,18 @@ public:
 };
 } // namespace internal
 } // namespace tbb
+
+#if !__TBB_X86_MSVC_INLINE_ASM_AVAILABLE
+inline void __TBB_get_cpu_ctl_env ( tbb::internal::cpu_ctl_env* ctl )
+{
+  *reinterpret_cast<unsigned int*>((char*)ctl) = _mm_getcsr();
+  // no way to get x87 control word from compliant MSVC x64
+}
+inline void __TBB_set_cpu_ctl_env ( const tbb::internal::cpu_ctl_env* ctl )
+{
+  _mm_setcsr(*reinterpret_cast<const unsigned int*>((const char*)ctl));
+}
+#endif
 
 #if !__TBB_WIN8UI_SUPPORT
 extern "C" __declspec(dllimport) int __stdcall SwitchToThread( void );
