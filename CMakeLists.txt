@@ -1,10 +1,14 @@
 cmake_minimum_required(VERSION 3.8)
 project(tbb CXX)
 
+if(NOT TBB_LINKAGE)
+  set(TBB_LINKAGE SHARED)
+endif()
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 configure_file(cmake/version_string.ver.in version_string.ver)
 
-add_library(tbb
+add_library(tbb ${TBB_LINKAGE}
     src/tbb/concurrent_hash_map.cpp
     src/tbb/concurrent_queue.cpp
     src/tbb/concurrent_vector.cpp
