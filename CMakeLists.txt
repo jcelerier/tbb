@@ -65,6 +65,7 @@ endif()
 
 if(UNIX AND NOT APPLE)
   target_compile_definitions(tbb PRIVATE DO_ITT_NOTIFY)
+  target_link_libraries(tbb PUBLIC ${CMAKE_DL_LIBS})
 endif()
 
 if(WIN32)
