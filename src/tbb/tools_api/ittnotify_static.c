@@ -28,6 +28,10 @@
 #include <stdarg.h>
 #include <string.h>
 
+#if ITT_OS==ITT_OS_LINUX
+#include <linux/limits.h>
+#endif
+
 #define INTEL_NO_MACRO_BODY
 #define INTEL_ITTNOTIFY_API_PRIVATE
 #include "ittnotify.h"
